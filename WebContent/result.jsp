@@ -4,13 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Welcome to DBLP Bookstore</title>
+<title>Your Search Results</title>
 </head>
 <body>
-	<%@ include file="header.html"%>
-	<h3>Let's start searching through our database!</h3>
-	<form action="search.jsp">
-		<input type="submit" value="Start Searching!" />
-	</form>
+	<center>
+		<h1 style="color: red">Search Results</h1>
+		<hr>
+	</center>
+	<h2>Your search results are:</h2>
+
+<form action="search.jsp">
+	<input type="submit" value="Return" />
+</form>
 </body>
 </html>
