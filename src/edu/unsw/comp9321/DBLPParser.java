@@ -1,148 +1,100 @@
 package edu.unsw.comp9321;
 
 import javax.xml.parsers.*;
+import javax.servlet.ServletContext;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
-public class DBLPParser implements ContentHandler {
-	Logger logger = Logger.getLogger(this.getClass().getName());
+public class DBLPParser implements ContentHandler{
 	
 	private StringBuilder builder;
+	private ArrayList<DBLPBean> publications;
+	private ArrayList<ArticleBean> articles;
+	private enum TagType {article, book, inproceedings, proceedings, incollection, masterthesis, 
+		phdthesis, www, author, title, publisher, isbn, year, unidentified};	
+	private TagType openingTag = TagType.unidentified, closingTag = TagType.unidentified;
+	private ArticleBean article;
+	private DBLPBean book;
+	private DBLPBean inproceedings;
+	private DBLPBean proceedings;
+	private DBLPBean incollection;
+	private DBLPBean masterthesis;
+	private DBLPBean phdthesis;
+	private DBLPBean www;
 	
-	public DBLPParser(InputStream xmlFile) throws ParsingFailedException {
+//	boolean article = false;
+//	boolean inproceedings = false;
+//	boolean proceedings = false;
+//	boolean book = false;
+//	boolean incollection = false;
+//	boolean phdthesis = false;
+//	boolean masterthesis = false;
+//	boolean www = false;
+		
+	public DBLPParser(InputStream is) {
+		articles = new ArrayList<ArticleBean>();
 		try {
-			InputSource xmlSource = new InputSource(xmlFile);
-			XMLReader parser = XMLReaderFactory.createXMLReader();
+			InputSource xml = new InputSource(is);
 			
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser saxParser = factory.newSAXParser(); //might be ok to comment this
+			
+			XMLReader parser = XMLReaderFactory.createXMLReader();
 			parser.setContentHandler(this);
-			parser.parse(xmlSource);
-		} catch(Exception e) {
-			logger.log(Level.SEVERE, "Failed to process XML File", e);
-			throw new ParsingFailedException(e);
+			parser.setFeature("http://xml.org/sax/features/validation", false);
+			parser.parse(xml);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public static void main(String argv[]) {
-		
-		try {
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			SAXParser saxParser = factory.newSAXParser();
-			
-			DefaultHandler handler = new DefaultHandler() {//am confused here
-				
-				boolean article = false;
-				boolean inproceedings = false;
-				boolean proceedings = false;
-				boolean book = false;
-				boolean incollection = false;
-				boolean phdthesis = false;
-				boolean masterthesis = false;
-				boolean www = false;
-				
-				public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-					System.out.println("Start Element :" + qName);
-					
-					if(qName.equalsIgnoreCase("ARTICLE")) {
-						article = true;
-					}
-					if(qName.equalsIgnoreCase("INPROCEEDINGS")) {
-						inproceedings = true;
-					}
-					if(qName.equalsIgnoreCase("PROCEEDINGS")) {
-						proceedings = true;
-					}
-					if(qName.equalsIgnoreCase("BOOK")) {
-						book = true;
-					}
-					if(qName.equalsIgnoreCase("INCOLLECTION")) {
-						incollection = true;
-					}
-					if(qName.equalsIgnoreCase("PHDTHESIS")) {
-						phdthesis = true;
-					}
-					if(qName.equalsIgnoreCase("MASTERTHESIS")) {
-						masterthesis = true;
-					}
-					if(qName.equalsIgnoreCase("WWW")) {
-						www = true;
-					}
-				}
-				
-				public void endElement(String uri, String localName, String qName) throws SAXException {
-					System.out.println("End Element :" + qName);
-				}
-				
-				public void characters(char ch[], int start, int length) throws SAXException {
-					if(article) {
-						System.out.println("Article :" + new String(ch, start, length));
-						article = false;
-					}
-					if(inproceedings) {
-						System.out.println("Inproceedings :" + new String(ch, start, length));
-						inproceedings = false;
-					}
-					if(proceedings) {
-						System.out.println("Proceedings :" + new String(ch, start, length));
-						proceedings = false;
-					}
-					if(book) {
-						System.out.println("Book :" + new String(ch, start, length));
-						book = false;
-					}
-					if(incollection) {
-						System.out.println("Incollection :" + new String(ch, start, length));
-						incollection = false;
-					}
-					if(phdthesis) {
-						System.out.println("PHDThesis :" + new String(ch, start, length));
-						phdthesis = false;
-					}
-					if(masterthesis) {
-						System.out.println("MasterThesis :" + new String(ch, start, length));
-						masterthesis = false;
-					}
-					if(www) {
-						System.out.println("WWW :" + new String(ch, start, length));
-						www = false;
-					}
-					
-				}
-				
-			};
-			
-			saxParser.parse("nijuuman.xml", handler);
-			
-			}
-		catch (Exception e) {
-			e.printStackTrace();
-			
-		}
-		
+//	public ArrayList<DBLPBean> getDBLP() {
+//		return publications;
+//	}
+	
+	public ArrayList<ArticleBean> getArticle() {
+		return articles;
 	}
 
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		logger.info("Adding characters to the buffer");
 		builder.append(new String(ch,start,length));
 		
 	}
 
 	@Override
 	public void endDocument() throws SAXException {
-		// TODO Auto-generated method stub
+		System.out.println("Parsing Ended");
 		
 	}
 
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		// TODO Auto-generated method stub
+		try {
+			closingTag = TagType.valueOf(TagType.class,qName);
+		} catch(Exception e) {
+			closingTag = TagType.unidentified;
+		}
+		String content = builder.toString();
+		
+		switch(closingTag){
+		case article:
+			articles.add(article);
+			break;
+		case book:
+			articles.add(article);
+			break;
+		case author:
+			article.setAuthor(content);
+			System.out.println(content);
+		default:
+			break;
+		}
 		
 	}
 
@@ -184,7 +136,25 @@ public class DBLPParser implements ContentHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-		// TODO Auto-generated method stub
+		System.out.println("Start Element :" + qName);
+		try{
+			openingTag = TagType.valueOf(TagType.class,qName);
+		}catch(Exception e){
+			openingTag = TagType.unidentified;
+		}
+		
+		/*
+		 * Create a new bean when opening tag for book element is encountered  
+		 */
+		if(openingTag.toString().equals("article")){
+			article=new ArticleBean();
+		}
+		if(openingTag.toString().equals("book")){
+			article=new ArticleBean();
+		}
+		
+		/* Create a new character buffer to hold contents of the element */
+		builder = new StringBuilder();
 		
 	}
 
@@ -193,5 +163,5 @@ public class DBLPParser implements ContentHandler {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
+	
