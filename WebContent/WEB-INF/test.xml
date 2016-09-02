@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dblp [
 <!ELEMENT dblp (article|book)*>
-<!ELEMENT article (author?)>
+<!ELEMENT article (author?, title*)>
 <!ELEMENT book (author?, title*)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
@@ -11,8 +11,8 @@
   <article>
     <author>Mak Erot</author>
   </article>
-  <book>
+  <article>
     <author>Kak Seto</author>
     <title>Pedo Lover</title>
-  </book>
+  </article>
 </dblp>

@@ -40,7 +40,7 @@ public class ControlServlet extends HttpServlet {
     public void init() throws ServletException {
     	super.init();
     	
-//    	InputStream is = getServletContext().getResourceAsStream("/WEB-INF/test.xml");
+//    	InputStream is = getServletContext().getResourceAsStream("/WEB-INF/nijuuman.xml");
 //    	DBLPParser parser;
     	GSONParser gsonParser;
     	try {
