@@ -23,10 +23,11 @@
 <body>
 	<%@ include file="header.html"%>
 	<h3>Search for Books, Articles, Publications, anything!</h3>
-	<form name="searchForms" action="./result" method="GET">
+	<form name="searchForms" action="./results" method="GET">
 		<div class="form-group">
 			<input type="text" name="searchQuery" class="form-control"
-				placeholder=" Author, Title, or Type" />
+				placeholder=" Author, Title, or Type" /> 
+			<input type="hidden" name="page" value="1" />
 		</div>
 		<button type="submit" class="btn btn-primary">Search</button>
 	</form>

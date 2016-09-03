@@ -23,7 +23,7 @@
 <body>
 	<%@ include file="header.html"%>
 	<h3>Search for Books, Articles, Publications, anything!</h3>
-	<form name="searchForms" action="./result" method="GET">
+	<form name="searchForms" action="./results" method="GET">
 		<ul>
 			<li>Type of Entry: <input type="text" name="searchEntryType" /></li>
 			<li>Author: <input type="text" name="searchAuthor" /></li>

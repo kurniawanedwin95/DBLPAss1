@@ -72,12 +72,16 @@ public class ControlServlet extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
 		}
-		else if(request.getServletPath().equals("/result")) {
+		else if(request.getServletPath().equals("/results")) {
+			int page = Integer.parseInt(request.getParameter("page"));
 			String searchQuery = request.getParameter("searchQuery").toLowerCase();
-			this.simpleSearch(searchQuery);
+			ArrayList<PublicationBean> resultBeans = this.simpleSearch(searchQuery);
+			resultBeans = pagination(resultBeans, page);
 			
+			getServletContext().setAttribute("results", resultBeans);
 			getServletContext().setAttribute("searchQuery", searchQuery);
-			RequestDispatcher rd = request.getRequestDispatcher("/result.jsp");
+			getServletContext().setAttribute("page", page);
+			RequestDispatcher rd = request.getRequestDispatcher("/results.jsp");
 			rd.forward(request, response);
 		}
 
@@ -109,12 +113,11 @@ public class ControlServlet extends HttpServlet {
 		getServletContext().setAttribute("randomtens", randomTen);
 	}
 
-	public void simpleSearch(String searchQuery) {
+	public ArrayList<PublicationBean> simpleSearch(String searchQuery) {
+		ArrayList<PublicationBean> resultBeans = new ArrayList<PublicationBean>();
 		if(searchQuery.equalsIgnoreCase("")) {
-			getServletContext().setAttribute("results", null);
+		
 		} else {
-			ArrayList<PublicationBean> resultBeans = new ArrayList<PublicationBean>();
-			int found=0;
 			for(int id=0; id<this.publicationBeans.size();id++) {
 				String author = this.publicationBeans.get(id).getAuthor();
 				String title = this.publicationBeans.get(id).getTitle();
@@ -123,7 +126,6 @@ public class ControlServlet extends HttpServlet {
 				if(author != null) {
 					if(author.toLowerCase().contains(searchQuery)) {
 						resultBeans.add(this.publicationBeans.get(id));
-						found++;
 						continue;
 					}
 				}
@@ -131,7 +133,6 @@ public class ControlServlet extends HttpServlet {
 				if(title != null) {
 					if(title.toLowerCase().contains(searchQuery)) {
 						resultBeans.add(this.publicationBeans.get(id));
-						found++;
 						continue;
 					}
 				}
@@ -139,18 +140,23 @@ public class ControlServlet extends HttpServlet {
 				if(type != null) {
 					if(type.toLowerCase().contains(searchQuery)) {
 						resultBeans.add(this.publicationBeans.get(id));
-						found++;
 						continue;
 					}
 				}
 
 			}
-			if(found == 0) {
-				getServletContext().setAttribute("results", null);
-			} else {
-				getServletContext().setAttribute("results", resultBeans);
-			}
 		}
+		return resultBeans;
+	}
+	
+	public ArrayList<PublicationBean> pagination(ArrayList<PublicationBean> resultBeans, int page) {
+		ArrayList<PublicationBean> pagedBeans = new ArrayList<PublicationBean>();
+		int lowerbound = (page-1)*10;
+		int upperbound = (page*10)-1;
+		for(int i=lowerbound; (i<=upperbound) && (i<resultBeans.size()); i++) {
+			pagedBeans.add(resultBeans.get(i));
+		}
+		return pagedBeans;
 	}
 
 }

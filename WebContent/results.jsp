@@ -25,8 +25,8 @@
 	<h2>Your searched for: ${searchQuery}</h2>
 	<c:choose>
 		<c:when test="${empty results}">
-		Sorry, no matching datasets found!
-	</c:when>
+			Sorry, no matching datasets found!
+		</c:when>
 		<c:otherwise>
 			<table class="table">
 				<tr>
@@ -46,6 +46,15 @@
 					</tr>
 				</c:forEach>
 			</table>
+		</c:otherwise>
+	</c:choose>
+	<c:choose>
+		<c:when test="${page == 1 }">
+			<a href="./results?searchQuery=${searchQuery}&page=${page+1}" class="btn btn-default">Next Page</a>
+		</c:when>
+		<c:otherwise>
+			<a href="./results?searchQuery=${searchQuery}&page=${page-1}" class="btn btn-default">Previous Page</a>
+			<a href="./results?searchQuery=${searchQuery}&page=${page+1}" class="btn btn-default">Next Page</a>
 		</c:otherwise>
 	</c:choose>
 	<%@ include file="footer.html"%>
