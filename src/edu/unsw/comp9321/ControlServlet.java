@@ -2,7 +2,7 @@ package edu.unsw.comp9321;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -26,7 +26,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
 @WebServlet({"/","/search"})
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private List<ArticleBean> articles;
+	private ArrayList<ArticleBean> articleBeans;
+	private ArrayList<BookBean> bookBeans;
+	private ArrayList<InproceedingsBean> inproceedingsBeans;
+	private ArrayList<ProceedingsBean> proceedingsBeans;
+	private ArrayList<IncollectionBean> incollectionBeans;
+	private ArrayList<MastersThesisBean> mastersThesisBeans;
+	private ArrayList<PHDThesisBean> phdThesisBeans;
+	private ArrayList<WWWBean> wwwBeans;
+	
 	Logger logger = Logger.getLogger(this.getClass().getName());
        
     /**
@@ -40,22 +48,17 @@ public class ControlServlet extends HttpServlet {
     public void init() throws ServletException {
     	super.init();
     	
-//    	InputStream is = getServletContext().getResourceAsStream("/WEB-INF/nijuuman.xml");
-//    	DBLPParser parser;
     	GSONParser gsonParser;
     	try {
-//    		parser = new DBLPParser(is);
     		gsonParser = new GSONParser();
+    		randomTen(gsonParser);
     	} catch(Exception e) {
     		logger.severe("XML parsing failed"+e.getMessage());
     		throw new ServletException(e);
     	}
-//    	List<DBLPBean> dblp = parser.getDBLP();
-//    	articles = parser.getArticle();
-    	articles = gsonParser.getArticle();
-//    	System.out.println(articles.toString());
-    	getServletContext().setAttribute("article", articles);
-    	//gotta make list of parsed stuff available for the entire app
+
+//    	articles = gsonParser.getArticle();
+//    	getServletContext().setAttribute("article", articles);
     }
 
 	/**
@@ -63,8 +66,7 @@ public class ControlServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//System.out.println(articles.toString());
-		request.setAttribute("articles", articles);
+		request.setAttribute("articles", articleBeans);
 		RequestDispatcher rd = request.getRequestDispatcher("/search.jsp");
 		rd.forward(request, response);
 	}
@@ -75,6 +77,32 @@ public class ControlServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	public void randomTen(GSONParser gsonParser) {
+		//will get 1 articles, 2 books, 1 proceedings, 1 inproceedings, 1 mastersthesis, 1 phdthesis, 1 incollection, 2 www 
+		ArrayList randomTen = new ArrayList();
+		
+		articleBeans = gsonParser.getArticle();
+		bookBeans = gsonParser.getBook();
+		inproceedingsBeans = gsonParser.getInproceedings();
+		proceedingsBeans = gsonParser.getProceedings();
+		incollectionBeans = gsonParser.getIncollection();
+		mastersThesisBeans = gsonParser.getMastersThesis();
+		phdThesisBeans = gsonParser.getPHDThesis();
+		wwwBeans = gsonParser.getWWW();
+		randomTen.add(articleBeans.get(1));
+		randomTen.add(bookBeans.get(1));
+		randomTen.add(bookBeans.get(2));
+		randomTen.add(inproceedingsBeans.get(1));
+		randomTen.add(proceedingsBeans.get(1));
+		randomTen.add(incollectionBeans.get(1));
+		randomTen.add(mastersThesisBeans.get(1));
+		randomTen.add(phdThesisBeans.get(1));
+		randomTen.add(wwwBeans.get(1));
+		randomTen.add(wwwBeans.get(2));
+		
+    	getServletContext().setAttribute("randomtens", randomTen);
 	}
 
 }

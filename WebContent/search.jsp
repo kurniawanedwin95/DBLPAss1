@@ -28,10 +28,21 @@
 	</form>
 	<hr>
 	<h2>Here are 10 Random Entries to showcase our wide variety of database!</h2><br>
-	<c:forEach var="article" items="${articles}">
+	<table>
 		<tr>
-			<td>${article.author}</td><br>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Publisher</th>
+			<th>Year</th>
 		</tr>
-	</c:forEach>
+		<c:forEach var="random" items="${randomtens}">
+			<tr>
+				<td>${random.title}</td>
+				<td>${random.author}</td>
+				<td>${random.publisher}</td>
+				<td>${random.year}</td>
+			</tr>
+		</c:forEach>
+	</table>
 </body>
 </html>

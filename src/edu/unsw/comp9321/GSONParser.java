@@ -14,160 +14,119 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.reflect.TypeToken;
 
 public class GSONParser {
-	private ArrayList<ArticleBean> articles;
-	private ArticleBean article;
 
-	private ArrayList<BookBean> books;
-	private BookBean book;
+	private ArrayList<ArticleBean> articleBeans;
+	private ArrayList<BookBean> bookBeans;
+	private ArrayList<InproceedingsBean> inproceedingsBeans;
+	private ArrayList<ProceedingsBean> proceedingsBeans;
+	private ArrayList<IncollectionBean> incollectionBeans;
+	private ArrayList<MastersThesisBean> mastersThesisBeans;
+	private ArrayList<PHDThesisBean> phdThesisBeans;
+	private ArrayList<WWWBean> wwwBeans;
 
 	public GSONParser() {
 		try {
-	    String path = new File("WebContent/WEB-INF/trimmed-dblp.json").getAbsolutePath();
+			String path = new File("WebContent/WEB-INF/trimmed-dblp.json").getAbsolutePath();
 			JsonReader jsonReader = new JsonReader(new FileReader(path));
-      
-      Gson gson = new Gson();
-      ArrayList<ArticleBean> articleBeans;
 
-      jsonReader.beginObject();
-      while (jsonReader.hasNext()) {
-        String name = jsonReader.nextName();
-        System.out.println("am here");
-        switch (name) {
-          case "article":
-            Type articleBeanListType = new TypeToken<ArrayList<ArticleBean>>() {}.getType();
-            articleBeans = gson.fromJson(jsonReader, articleBeanListType);
-            System.out.println(name);
-            System.out.println("please?");
-            break;
-        }
-      }
-      jsonReader.endObject();
+			Gson gson = new Gson();
+
+			jsonReader.beginObject();
+			while (jsonReader.hasNext()) {
+				String name = jsonReader.nextName();
+				System.out.println("before switch");
+				switch (name) {
+				case "article":
+					Type articleBeanListType = new TypeToken<ArrayList<ArticleBean>>() {}.getType();
+					articleBeans = gson.fromJson(jsonReader, articleBeanListType);
+					System.out.println(articleBeans.size());
+					System.out.println(name);
+					break;
+				case "book":
+					Type bookBeanListType = new TypeToken<ArrayList<BookBean>>() {}.getType();
+					bookBeans = gson.fromJson(jsonReader, bookBeanListType);
+					System.out.println(bookBeans.size());
+					System.out.println(name);
+					break;
+				case "inproceedings":
+					Type inproceedingsBeanListType = new TypeToken<ArrayList<InproceedingsBean>>() {}.getType();
+					inproceedingsBeans = gson.fromJson(jsonReader,  inproceedingsBeanListType);
+					System.out.println(inproceedingsBeans.size());
+					System.out.println(name);
+					break;
+				case "proceedings":
+					Type proceedingsBeanListType = new TypeToken<ArrayList<ProceedingsBean>>() {}.getType();
+					proceedingsBeans = gson.fromJson(jsonReader, proceedingsBeanListType);
+					System.out.println(proceedingsBeans.size());
+					System.out.println(name);
+					break;
+				case "incollection":
+					Type incollectionBeanListType = new TypeToken<ArrayList<IncollectionBean>>() {}.getType();
+					incollectionBeans = gson.fromJson(jsonReader, incollectionBeanListType);
+					System.out.println(incollectionBeans.size());
+					System.out.println(name);
+					break;
+				case "mastersthesis":
+					Type masterThesisBeanListType = new TypeToken<ArrayList<MastersThesisBean>>() {}.getType();
+					mastersThesisBeans = gson.fromJson(jsonReader, masterThesisBeanListType);
+					System.out.println(mastersThesisBeans.size());
+					System.out.println(name);
+					break;
+				case "phdthesis":
+					Type phdThesisBeanListType = new TypeToken<ArrayList<PHDThesisBean>>() {}.getType();
+					phdThesisBeans = gson.fromJson(jsonReader, phdThesisBeanListType);
+					System.out.println(phdThesisBeans.size());
+					System.out.println(name);
+					break;
+				case "www":
+					Type wwwBeanListType = new TypeToken<ArrayList<WWWBean>>() {}.getType();
+					wwwBeans = gson.fromJson(jsonReader, wwwBeanListType);
+					System.out.println(wwwBeans.size());
+					System.out.println(name);
+					break;
+				default:
+					System.out.println("im in default");
+					break;
+				}
+			}
+			jsonReader.endObject();
 			jsonReader.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-//  private ArrayList<ArticleBean> readArticleList(JsonReader jsonReader) {
-//    Gson gson = new Gson();
-//
-//    jsonReader.beginArray();
-//    while (jsonReader.hasNext()) {
-//      jsonReader.beginObject();
-//      gson.fromJson(jsonReader);
-//    }
-//  }
-
-//	public void init() throws ServletException {
-//		try {
-//			JsonReader jsonReader = new JsonReader(new FileReader("trimmed-dblp.json"));
-//			Gson gson = new GsonBuilder().create();
-//
-//			jsonReader.beginObject();
-//			while(jsonReader.hasNext()) {
-//				String name = jsonReader.nextName();
-//				if(name.equals("dblp")) {
-//					readJson(jsonReader);
-//				}
-//			}
-//			jsonReader.endObject();
-//			jsonReader.close();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	public void readJson(JsonReader jsonReader) throws IOException {
-
-		jsonReader.beginObject();
-		while(jsonReader.hasNext()) {
-			String name = jsonReader.nextName();
-			System.out.println(name);
-
-			if(name.contains("article")) {
-				articles = new ArrayList<ArticleBean>();
-				articles.add(article);
-				jsonReader.beginObject();
-				while(jsonReader.hasNext()) {
-					String n = jsonReader.nextName();
-					if(n.equals("author")){
-						String input = jsonReader.nextString();
-						System.out.println("Article author: " + input);
-						article.setAuthor(input);
-					}
-					if(n.equals("title")){
-						String input = jsonReader.nextString();
-						System.out.println("Article title: " + input);
-						article.setTitle(input);
-					}
-					if(n.equals("publisher")){
-						String input = jsonReader.nextString();
-						System.out.println("Article publisher: " + input);
-						article.setPublisher(input);
-					}
-					if(n.equals("year")){
-						int input = jsonReader.nextInt();
-						System.out.println("Article year: " + input);
-						article.setYear(input);
-					}
-					if(n.equals("isbn")){
-						String input = jsonReader.nextString();
-						System.out.println("Article isbn: " + input);
-						article.setIsbn(input);
-					}
-//					if (n.equals("messages")){
-//	                     jsonReader.beginArray();
-//	                     while  (jsonReader.hasNext()) {
-//	                          System.out.println(jsonReader.nextString());
-//	                     }
-//	                     jsonReader.endArray();
-//	                }
-				}
-				jsonReader.endObject();
-			}
-
-			if(name.contains("book")) {
-				books = new ArrayList<BookBean>();
-				books.add(book);
-				jsonReader.beginObject();
-				while(jsonReader.hasNext()) {
-					String n = jsonReader.nextName();
-					if(n.equals("author")){
-						String input = jsonReader.nextString();
-						System.out.println("Book author: " + input);
-						book.setAuthor(input);
-					}
-					if(n.equals("title")){
-						String input = jsonReader.nextString();
-						System.out.println("Book title: " + input);
-						book.setTitle(input);
-					}
-					if(n.equals("publisher")){
-						String input = jsonReader.nextString();
-						System.out.println("Book publisher: " + input);
-						book.setPublisher(input);
-					}
-					if(n.equals("year")){
-						int input = jsonReader.nextInt();
-						System.out.println("Book year: " + input);
-						book.setYear(input);
-					}
-					if(n.equals("isbn")){
-						String input = jsonReader.nextString();
-						System.out.println("Book isbn: " + input);
-						book.setIsbn(input);
-					}
-				}
-				jsonReader.endObject();
-			}
-
-
-		}
-		jsonReader.endObject();
-	}
-
 	public ArrayList<ArticleBean> getArticle() {
-		return articles;
+		return articleBeans;
 	}
+	
+	public ArrayList<BookBean> getBook() {
+		return bookBeans;
+	}
+	
+	public ArrayList<InproceedingsBean> getInproceedings() {
+		return inproceedingsBeans;
+	}
+	
+	public ArrayList<ProceedingsBean> getProceedings() {
+		return proceedingsBeans;
+	}
+	
+	public ArrayList<IncollectionBean> getIncollection() {
+		return incollectionBeans;
+	}
+
+	public ArrayList<MastersThesisBean> getMastersThesis() {
+		return mastersThesisBeans;
+	}
+	
+	public ArrayList<PHDThesisBean> getPHDThesis() {
+		return phdThesisBeans;
+	}
+	
+	public ArrayList<WWWBean> getWWW() {
+		return wwwBeans;
+	}
+	
 
 }

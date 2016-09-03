@@ -1,6 +1,6 @@
 package edu.unsw.comp9321;
 
-public class BookBean {
+public class MastersThesisBean {
 
 	private String author;
 	private String editor;
@@ -26,8 +26,8 @@ public class BookBean {
 	private String chapter;
 	private String type;
 	
-	public BookBean() {
-		this.setType("book");
+	public MastersThesisBean() {
+		this.setType("mastersthesis");
 	}
 
 	public String getAuthor() {
