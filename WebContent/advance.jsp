@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Your Search Results</title>
+<title>COMP9321 Assignment 1 DBLP</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -22,34 +22,41 @@
 </head>
 <body>
 	<%@ include file="header.html"%>
-	<h2>Your searched for: ${searchQuery}</h2>
-	<c:choose>
-		<c:when test="${empty results}">
-		Sorry, no matching datasets found!
-	</c:when>
-		<c:otherwise>
-			<table class="table">
-				<tr>
-					<th>Title</th>
-					<th>Author</th>
-					<th>Publisher</th>
-					<th>Year</th>
-					<th>Type</th>
-				</tr>
-				<c:forEach var="result" items="${results}">
-					<tr>
-						<td><a href="./details?id=${result.id}">${result.title}</a></td>
-						<td>${result.author}</td>
-						<td>${result.publisher}</td>
-						<td>${result.year}</td>
-						<td>${result.type}</td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:otherwise>
-	</c:choose>
-	<%@ include file="footer.html"%>
-
+	<h3>Search for Books, Articles, Publications, anything!</h3>
+	<form name="searchForms" action="./result" method="GET">
+		<ul>
+			<li>Type of Entry: <input type="text" name="searchEntryType" /></li>
+			<li>Author: <input type="text" name="searchAuthor" /></li>
+			<li>Title: <input type="text" name="searchTitle" /></li>
+			<li>Publisher: <input type="text" name="searchPublisher" /></li>
+			<li>Year: <input type="text" name="searchYear" /></li>
+			<li>Pages: <input type="text" name="searchPages" /></li>
+			<li>ISBN: <input type="text" name="searchISBN" /></li>
+		</ul>
+		<button type="submit" class="btn btn-primary">Search</button>
+	</form>
+	<hr>
+	<h2>Here are 10 Random Entries to showcase our wide variety of
+		database!</h2>
+	<br>
+	<table class="table">
+		<tr>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Publisher</th>
+			<th>Year</th>
+			<th>Type</th>
+		</tr>
+		<c:forEach var="random" items="${randomtens}">
+			<tr>
+				<td><a href="./details?id=${random.id}">${random.title}</a></td>
+				<td>${random.author}</td>
+				<td>${random.publisher}</td>
+				<td>${random.year}</td>
+				<td>${random.type}</td>
+			</tr>
+		</c:forEach>
+	</table>
 	<!-- Latest compiled and minified JavaScript -->
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"

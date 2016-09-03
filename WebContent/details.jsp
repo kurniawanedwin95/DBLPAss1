@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="edu.unsw.comp9321.*"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Your Search Results</title>
+<title>Publication Details</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -22,39 +20,28 @@
 </head>
 <body>
 	<%@ include file="header.html"%>
-	<h2>Your searched for: ${searchQuery}</h2>
-	<c:choose>
-		<c:when test="${empty results}">
-		Sorry, no matching datasets found!
-	</c:when>
-		<c:otherwise>
-			<table class="table">
-				<tr>
-					<th>Title</th>
-					<th>Author</th>
-					<th>Publisher</th>
-					<th>Year</th>
-					<th>Type</th>
-				</tr>
-				<c:forEach var="result" items="${results}">
-					<tr>
-						<td><a href="./details?id=${result.id}">${result.title}</a></td>
-						<td>${result.author}</td>
-						<td>${result.publisher}</td>
-						<td>${result.year}</td>
-						<td>${result.type}</td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:otherwise>
-	</c:choose>
-	<%@ include file="footer.html"%>
-
+	<h3>More Details</h3>
+	<form name="detailForms" action="./cart" method="post">
+		<ul>
+			<li>Type of Entry: ${details.type }</li>
+			<li>Author(s): <strong>${details.author }</strong></li>
+			<li>Title: <strong>${details.title }</strong></li>
+			<li>Publisher: ${details.publisher }</li>
+			<li>Editor: ${details.editor }</li>
+			<li>Address: ${details.address }</li>
+			<li>Year: ${details.year }</li>
+			<li>Number: ${details.number }</li>
+			<li>Series: ${details.series }</li>
+			<li>ISBN: <i>${details.isbn }</i></li>
+			<li>URL: <i>${details.url }</i></li>
+		</ul>
+		<button type="submit" class="btn btn-primary">Add to Cart</button>
+	</form>
+	<%@ include file="footer.html" %>
 	<!-- Latest compiled and minified JavaScript -->
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
-
 </body>
 </html>

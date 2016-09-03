@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>DBLP Bookstore</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>My Cart</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -16,13 +18,11 @@
 	crossorigin="anonymous">
 </head>
 <body>
-	<center>
-		<h1 style="color: blue">Welcome to the DBLP Bookstore</h1>
-	</center>
-	<div align="right">
-		<a href="./cart" class="btn btn-primary">My Cart</a>
-	</div>
-	<hr>
+	<%@ include file="header.html"%>
+	<h3>Inside the Cart:</h3>
+
+	<%@ include file="footer.html" %>
+
 	<!-- Latest compiled and minified JavaScript -->
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"

@@ -23,71 +23,74 @@ public class GSONParser {
 	private ArrayList<MastersThesisBean> mastersThesisBeans;
 	private ArrayList<PHDThesisBean> phdThesisBeans;
 	private ArrayList<WWWBean> wwwBeans;
-
+	private ArrayList<PublicationBean> publicationBeans;
+	
 	public GSONParser() {
 		try {
 			String path = new File("WebContent/WEB-INF/trimmed-dblp.json").getAbsolutePath();
 			JsonReader jsonReader = new JsonReader(new FileReader(path));
-
+			publicationBeans = new ArrayList<PublicationBean>();
 			Gson gson = new Gson();
 
 			jsonReader.beginObject();
 			while (jsonReader.hasNext()) {
 				String name = jsonReader.nextName();
-				System.out.println("before switch");
 				switch (name) {
 				case "article":
 					Type articleBeanListType = new TypeToken<ArrayList<ArticleBean>>() {}.getType();
 					articleBeans = gson.fromJson(jsonReader, articleBeanListType);
-					System.out.println(articleBeans.size());
+					publicationBeans.addAll(articleBeans);
 					System.out.println(name);
 					break;
 				case "book":
 					Type bookBeanListType = new TypeToken<ArrayList<BookBean>>() {}.getType();
 					bookBeans = gson.fromJson(jsonReader, bookBeanListType);
-					System.out.println(bookBeans.size());
+					publicationBeans.addAll(bookBeans);
 					System.out.println(name);
 					break;
 				case "inproceedings":
 					Type inproceedingsBeanListType = new TypeToken<ArrayList<InproceedingsBean>>() {}.getType();
 					inproceedingsBeans = gson.fromJson(jsonReader,  inproceedingsBeanListType);
-					System.out.println(inproceedingsBeans.size());
+					publicationBeans.addAll(inproceedingsBeans);
 					System.out.println(name);
 					break;
 				case "proceedings":
 					Type proceedingsBeanListType = new TypeToken<ArrayList<ProceedingsBean>>() {}.getType();
 					proceedingsBeans = gson.fromJson(jsonReader, proceedingsBeanListType);
-					System.out.println(proceedingsBeans.size());
+					publicationBeans.addAll(proceedingsBeans);
 					System.out.println(name);
 					break;
 				case "incollection":
 					Type incollectionBeanListType = new TypeToken<ArrayList<IncollectionBean>>() {}.getType();
 					incollectionBeans = gson.fromJson(jsonReader, incollectionBeanListType);
-					System.out.println(incollectionBeans.size());
+					publicationBeans.addAll(incollectionBeans);
 					System.out.println(name);
 					break;
 				case "mastersthesis":
 					Type masterThesisBeanListType = new TypeToken<ArrayList<MastersThesisBean>>() {}.getType();
 					mastersThesisBeans = gson.fromJson(jsonReader, masterThesisBeanListType);
-					System.out.println(mastersThesisBeans.size());
+					publicationBeans.addAll(mastersThesisBeans);
 					System.out.println(name);
 					break;
 				case "phdthesis":
 					Type phdThesisBeanListType = new TypeToken<ArrayList<PHDThesisBean>>() {}.getType();
 					phdThesisBeans = gson.fromJson(jsonReader, phdThesisBeanListType);
-					System.out.println(phdThesisBeans.size());
+					publicationBeans.addAll(phdThesisBeans);
 					System.out.println(name);
 					break;
 				case "www":
 					Type wwwBeanListType = new TypeToken<ArrayList<WWWBean>>() {}.getType();
 					wwwBeans = gson.fromJson(jsonReader, wwwBeanListType);
-					System.out.println(wwwBeans.size());
+					publicationBeans.addAll(wwwBeans);
 					System.out.println(name);
 					break;
 				default:
 					System.out.println("im in default");
 					break;
 				}
+			}
+			for(int id=0; id<publicationBeans.size(); id++) {
+				publicationBeans.get(id).setId(id);
 			}
 			jsonReader.endObject();
 			jsonReader.close();
@@ -126,6 +129,10 @@ public class GSONParser {
 	
 	public ArrayList<WWWBean> getWWW() {
 		return wwwBeans;
+	}
+	
+	public ArrayList<PublicationBean> getPublication() {
+		return publicationBeans;
 	}
 	
 
