@@ -68,20 +68,34 @@ public class ControlServlet extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/details.jsp");
 			rd.forward(request, response);
 		} 
+		
 		else if(request.getServletPath().equals("/cart")) {
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
 		}
+		
 		else if(request.getServletPath().equals("/results")) {
 			int page = Integer.parseInt(request.getParameter("page"));
 			String searchQuery = request.getParameter("searchQuery").toLowerCase();
 			ArrayList<PublicationBean> resultBeans = this.simpleSearch(searchQuery);
+			boolean lastPage = this.isLastPage(resultBeans.size(), page);
 			resultBeans = pagination(resultBeans, page);
 			
+			getServletContext().setAttribute("lastPage", lastPage);
 			getServletContext().setAttribute("results", resultBeans);
 			getServletContext().setAttribute("searchQuery", searchQuery);
 			getServletContext().setAttribute("page", page);
 			RequestDispatcher rd = request.getRequestDispatcher("/results.jsp");
+			rd.forward(request, response);
+		}
+		
+		else if(request.getServletPath().equals("/advance")) {
+			RequestDispatcher rd = request.getRequestDispatcher("/advance.jsp");
+			rd.forward(request, response);
+		}
+		
+		else if(request.getServletPath().equals("/advance-results")) {
+			RequestDispatcher rd = request.getRequestDispatcher("/advance.jsp");
 			rd.forward(request, response);
 		}
 
@@ -149,6 +163,13 @@ public class ControlServlet extends HttpServlet {
 		return resultBeans;
 	}
 	
+	public ArrayList<PublicationBean> advanceSearch(String type, String author, String title, String publisher,
+			String year, String isbn) {
+		ArrayList<PublicationBean> resultBeans = new ArrayList<PublicationBean>();
+		
+		return resultBeans;
+	}
+	
 	public ArrayList<PublicationBean> pagination(ArrayList<PublicationBean> resultBeans, int page) {
 		ArrayList<PublicationBean> pagedBeans = new ArrayList<PublicationBean>();
 		int lowerbound = (page-1)*10;
@@ -157,6 +178,15 @@ public class ControlServlet extends HttpServlet {
 			pagedBeans.add(resultBeans.get(i));
 		}
 		return pagedBeans;
+	}
+	
+	public boolean isLastPage(int beanSize, int page) {
+		int last = page*10;
+		if(last >= beanSize) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

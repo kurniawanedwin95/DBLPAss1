@@ -20,7 +20,13 @@
 <body>
 	<%@ include file="header.html"%>
 	<h3>Inside the Cart:</h3>
-
+	<c:choose>
+		<c:when test="${empty cart}">
+			Shopping Cart is Empty!
+		</c:when>
+	</c:choose>
+	<c:otherwise>
+	</c:otherwise>
 	<%@ include file="footer.html" %>
 
 	<!-- Latest compiled and minified JavaScript -->

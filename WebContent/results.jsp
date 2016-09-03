@@ -49,8 +49,13 @@
 		</c:otherwise>
 	</c:choose>
 	<c:choose>
-		<c:when test="${page == 1 }">
+		<c:when test="${page == 1 and lastPage eq true }">
+		</c:when>
+		<c:when test="${page == 1}">
 			<a href="./results?searchQuery=${searchQuery}&page=${page+1}" class="btn btn-default">Next Page</a>
+		</c:when>
+		<c:when test="${lastPage eq true}">
+			<a href="./results?searchQuery=${searchQuery}&page=${page-1}" class="btn btn-default">Previous Page</a>
 		</c:when>
 		<c:otherwise>
 			<a href="./results?searchQuery=${searchQuery}&page=${page-1}" class="btn btn-default">Previous Page</a>

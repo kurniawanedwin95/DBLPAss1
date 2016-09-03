@@ -31,6 +31,7 @@
 		</div>
 		<button type="submit" class="btn btn-primary">Search</button>
 	</form>
+	<a href="./advance" class="btn btn-default">Advance Search</a>
 	<hr>
 	<h2>Here are 10 Random Entries to showcase our wide variety of
 		database!</h2>

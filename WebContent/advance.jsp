@@ -23,18 +23,19 @@
 <body>
 	<%@ include file="header.html"%>
 	<h3>Search for Books, Articles, Publications, anything!</h3>
-	<form name="searchForms" action="./results" method="GET">
+	<form name="searchForms" action="./advance-results" method="GET">
 		<ul>
-			<li>Type of Entry: <input type="text" name="searchEntryType" /></li>
-			<li>Author: <input type="text" name="searchAuthor" /></li>
-			<li>Title: <input type="text" name="searchTitle" /></li>
-			<li>Publisher: <input type="text" name="searchPublisher" /></li>
-			<li>Year: <input type="text" name="searchYear" /></li>
-			<li>Pages: <input type="text" name="searchPages" /></li>
-			<li>ISBN: <input type="text" name="searchISBN" /></li>
+			<li>Type of Entry: <input type="text" name="type" /></li>
+			<li>Author: <input type="text" name="author" /></li>
+			<li>Title: <input type="text" name="title" /></li>
+			<li>Publisher: <input type="text" name="publisher" /></li>
+			<li>Year: <input type="text" name="year" /></li>
+			<li>ISBN: <input type="text" name="isbn" /></li>
 		</ul>
 		<button type="submit" class="btn btn-primary">Search</button>
+		<input type="hidden" name="page" value="1" />
 	</form>
+	<a href="./search" class="btn btn-default">Normal Search</a>
 	<hr>
 	<h2>Here are 10 Random Entries to showcase our wide variety of
 		database!</h2>
