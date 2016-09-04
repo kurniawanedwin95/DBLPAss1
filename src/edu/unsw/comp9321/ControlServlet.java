@@ -1,23 +1,18 @@
 package edu.unsw.comp9321;
 
-import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.Random;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -27,8 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<PublicationBean> publicationBeans;
-	private HashMap<Integer, PublicationBean> cartBeans;
-
+	
 	Logger logger = Logger.getLogger(this.getClass().getName());
 
 	/**
@@ -46,7 +40,6 @@ public class ControlServlet extends HttpServlet {
 		try {
 			gsonParser = new GSONParser();
 			this.publicationBeans = gsonParser.getPublication();
-			this.cartBeans = new HashMap<Integer, PublicationBean>();
 			this.randomTen(gsonParser);
 		} catch(Exception e) {
 			logger.severe("XML parsing failed"+e.getMessage());
@@ -61,7 +54,13 @@ public class ControlServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		HttpSession session = request.getSession(true);
+		if (session.isNew()) {
+			session.setAttribute("users-cart",  new HashMap<Integer, PublicationBean>());
+		}
+		HashMap<Integer, PublicationBean> cartBeans = (HashMap<Integer, PublicationBean>) session.getAttribute("users-cart");
+		
 		if(request.getServletPath().equals("/details")){
 			int id = Integer.parseInt(request.getParameter("id"));
 			request.setAttribute("details", this.publicationBeans.get(id));
@@ -69,8 +68,9 @@ public class ControlServlet extends HttpServlet {
 			rd.forward(request, response);
 		} 
 
-		else if(request.getServletPath().equals("/cart")) {
-			getServletContext().setAttribute("cart", this.cartBeans.values());
+		else if(request.getServletPath().equals("/cart")) {			
+			getServletContext().setAttribute("cart", cartBeans.values());
+			System.out.println(cartBeans.values());
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
 		}
@@ -134,12 +134,18 @@ public class ControlServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		HttpSession session = request.getSession(true);
+		if (session.isNew()) {
+			session.setAttribute("users-cart",  new HashMap<Integer, PublicationBean>());
+		}
+		HashMap<Integer, PublicationBean> cartBeans = (HashMap<Integer, PublicationBean>) session.getAttribute("users-cart");
 
 		if(request.getServletPath().equals("/add-cart")) {
 			int id = Integer.parseInt(request.getParameter("id"));
-			this.addToCart(id);
+			this.addToCart(cartBeans, id);
 			
-			getServletContext().setAttribute("cart", this.cartBeans.values());
+			getServletContext().setAttribute("cart", cartBeans.values());
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
 		} 
@@ -155,7 +161,7 @@ public class ControlServlet extends HttpServlet {
 					arrayint.add(Integer.parseInt(id[i]));
 				}
 				
-				this.deleteFromCart(arrayint);
+				this.deleteFromCart(cartBeans, arrayint);
 			}
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
@@ -165,6 +171,8 @@ public class ControlServlet extends HttpServlet {
 		else {
 			doGet(request, response);
 		}
+		
+		session.setAttribute("users-cart",  cartBeans);
 	}
 
 	public void randomTen(GSONParser gsonParser) {
@@ -256,13 +264,13 @@ public class ControlServlet extends HttpServlet {
 		}
 	}
 
-	public void addToCart(int id) {
-		this.cartBeans.put(id, this.publicationBeans.get(id));
+	public void addToCart(HashMap<Integer, PublicationBean> cartBeans, int id) {
+		cartBeans.put(id, this.publicationBeans.get(id));
 	}
 	
-	public void deleteFromCart(ArrayList<Integer> id) {
+	public void deleteFromCart(HashMap<Integer, PublicationBean> cartBeans, ArrayList<Integer> id) {
 		for(int i=0; i<id.size(); i++) {
-			this.cartBeans.remove(id.get(i));
+			cartBeans.remove(id.get(i));
 		}
 	}
 
