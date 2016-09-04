@@ -27,7 +27,28 @@ public class PublicationBean {
 	private int id;
 	
 	public PublicationBean() {
-		
+		this.setAddress("");
+		this.setAuthor("");
+		this.setBooktitle("");
+		this.setCdrom("");
+		this.setChapter("");
+		this.setCite("");
+		this.setCrossref("");
+		this.setEditor("");
+		this.setEe("");
+		this.setIsbn("");
+		this.setJournal("");
+		this.setMonth("");
+		this.setNote("");
+		this.setNumber("");
+		this.setPages("");
+		this.setPublisher("");
+		this.setSchool("");
+		this.setSeries("");
+		this.setTitle("");
+		this.setUrl("");
+		this.setVolume("");
+		this.setYear("");
 	}
 
 	public String getAuthor() {

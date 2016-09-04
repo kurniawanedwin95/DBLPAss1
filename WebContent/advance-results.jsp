@@ -22,7 +22,9 @@
 </head>
 <body>
 	<%@ include file="header.html"%>
-	<h2>Your searched for: ${searchQuery}</h2>
+	<h2>Your searched for :</h2>
+	<h3>Type: ${type}, Author: ${author}, Title: ${title}, Publisher:
+		${publisher}, Year: ${year}, ISBN: ${isbn}</h3>
 	<c:choose>
 		<c:when test="${empty results}">
 			Sorry, no matching datasets found!
@@ -51,17 +53,25 @@
 	<c:choose>
 		<c:when test="${page == 1 and lastPage eq true and empty results}">
 		</c:when>
-		<c:when test="${page == 1 and lastPage eq true}">
+		<c:when test="${page == 1 and lastPage eq true }">
 		</c:when>
 		<c:when test="${page == 1}">
-			<a href="./results?searchQuery=${searchQuery}&page=${page+1}" class="btn btn-default">Next Page</a>
+			<a
+				href="./advance-results?type=${type}&author=${author}&title=${title}&publisher=${publisher}&year=${year}&isbn=${isbn}&page=${page+1}"
+				class="btn btn-default">Next Page</a>
 		</c:when>
 		<c:when test="${lastPage eq true}">
-			<a href="./results?searchQuery=${searchQuery}&page=${page-1}" class="btn btn-default">Previous Page</a>
+			<a
+				href="./advance-results?type=${type}&author=${author}&title=${title}&publisher=${publisher}&year=${year}&isbn=${isbn}&page=${page-1}"
+				class="btn btn-default">Previous Page</a>
 		</c:when>
 		<c:otherwise>
-			<a href="./results?searchQuery=${searchQuery}&page=${page-1}" class="btn btn-default">Previous Page</a>
-			<a href="./results?searchQuery=${searchQuery}&page=${page+1}" class="btn btn-default">Next Page</a>
+			<a
+				href="./advance-results?type=${type}&author=${author}&title=${title}&publisher=${publisher}&year=${year}&isbn=${isbn}&page=${page-1}"
+				class="btn btn-default">Previous Page</a>
+			<a
+				href="./advance-results?type=${type}&author=${author}&title=${title}&publisher=${publisher}&year=${year}&isbn=${isbn}&page=${page+1}"
+				class="btn btn-default">Next Page</a>
 		</c:otherwise>
 	</c:choose>
 	<%@ include file="footer.html"%>
