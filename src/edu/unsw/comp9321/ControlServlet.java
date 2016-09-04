@@ -117,6 +117,7 @@ public class ControlServlet extends HttpServlet {
 			getServletContext().setAttribute("publisher", publisher);
 			getServletContext().setAttribute("year", year);
 			getServletContext().setAttribute("isbn", isbn);
+			getServletContext().setAttribute("page", page);
 			RequestDispatcher rd = request.getRequestDispatcher("/advance-results.jsp");
 			rd.forward(request, response);
 		}
@@ -164,29 +165,26 @@ public class ControlServlet extends HttpServlet {
 
 		} else {
 			for(int id=0; id<this.publicationBeans.size();id++) {
-				String author = this.publicationBeans.get(id).getAuthor();
-				String title = this.publicationBeans.get(id).getTitle();
-				String type = this.publicationBeans.get(id).getType();
 
-				if(author != null) {
-					if(author.toLowerCase().contains(searchQuery)) {
-						resultBeans.add(this.publicationBeans.get(id));
-						continue;
-					}
+				if(this.publicationBeans.get(id).getAuthor().toLowerCase().contains(searchQuery)) {
+					resultBeans.add(this.publicationBeans.get(id));
+					continue;
 				}
 
-				if(title != null) {
-					if(title.toLowerCase().contains(searchQuery)) {
-						resultBeans.add(this.publicationBeans.get(id));
-						continue;
-					}
+
+				if(this.publicationBeans.get(id).getTitle().toLowerCase().contains(searchQuery)) {
+					resultBeans.add(this.publicationBeans.get(id));
+					continue;
 				}
 
-				if(type != null) {
-					if(type.toLowerCase().contains(searchQuery)) {
-						resultBeans.add(this.publicationBeans.get(id));
-						continue;
-					}
+				if(this.publicationBeans.get(id).getType().toLowerCase().contains(searchQuery)) {
+					resultBeans.add(this.publicationBeans.get(id));
+					continue;
+				}
+
+				if(this.publicationBeans.get(id).getYear().toLowerCase().contains(searchQuery)) {
+					resultBeans.add(this.publicationBeans.get(id));
+					continue;
 				}
 
 			}

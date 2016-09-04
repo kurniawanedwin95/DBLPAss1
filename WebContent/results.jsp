@@ -49,7 +49,7 @@
 		</c:otherwise>
 	</c:choose>
 	<c:choose>
-		<c:when test="${page == 1 and lastPage eq true and empty results}">
+		<c:when test="${empty results}">
 		</c:when>
 		<c:when test="${page == 1 and lastPage eq true}">
 		</c:when>
