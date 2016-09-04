@@ -70,7 +70,6 @@ public class ControlServlet extends HttpServlet {
 
 		else if(request.getServletPath().equals("/cart")) {			
 			getServletContext().setAttribute("cart", cartBeans.values());
-			System.out.println(cartBeans.values());
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
 		}
