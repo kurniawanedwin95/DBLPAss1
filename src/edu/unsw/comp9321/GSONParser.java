@@ -28,7 +28,7 @@ public class GSONParser {
 	public GSONParser() {
 		try {
 			String path = new File("WebContent/WEB-INF/trimmed-dblp.json").getAbsolutePath();
-//			String path = new File("WEB-INF/trimmed-dblp.json").getAbsolutePath();
+//			String path = new File("~/WEB-INF/trimmed-dblp.json").getAbsolutePath();
 			JsonReader jsonReader = new JsonReader(new FileReader(path));
 			publicationBeans = new ArrayList<PublicationBean>();
 			Gson gson = new Gson();
