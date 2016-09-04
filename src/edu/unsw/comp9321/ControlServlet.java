@@ -1,7 +1,12 @@
 package edu.unsw.comp9321;
 
+import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.Random;
 
@@ -21,15 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet({"/"})
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<ArticleBean> articleBeans;
-	private ArrayList<BookBean> bookBeans;
-	private ArrayList<InproceedingsBean> inproceedingsBeans;
-	private ArrayList<ProceedingsBean> proceedingsBeans;
-	private ArrayList<IncollectionBean> incollectionBeans;
-	private ArrayList<MastersThesisBean> mastersThesisBeans;
-	private ArrayList<PHDThesisBean> phdThesisBeans;
-	private ArrayList<WWWBean> wwwBeans;
 	private ArrayList<PublicationBean> publicationBeans;
+	private HashMap<Integer, PublicationBean> cartBeans;
 
 	Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -47,6 +45,8 @@ public class ControlServlet extends HttpServlet {
 		GSONParser gsonParser;
 		try {
 			gsonParser = new GSONParser();
+			this.publicationBeans = gsonParser.getPublication();
+			this.cartBeans = new HashMap<Integer, PublicationBean>();
 			this.randomTen(gsonParser);
 		} catch(Exception e) {
 			logger.severe("XML parsing failed"+e.getMessage());
@@ -70,9 +70,7 @@ public class ControlServlet extends HttpServlet {
 		} 
 
 		else if(request.getServletPath().equals("/cart")) {
-			int id = Integer.parseInt(request.getParameter("id"));
-
-
+			getServletContext().setAttribute("cart", this.cartBeans.values());
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
 		}
@@ -121,6 +119,8 @@ public class ControlServlet extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/advance-results.jsp");
 			rd.forward(request, response);
 		}
+		
+		
 
 		else {	
 			RequestDispatcher rd = request.getRequestDispatcher("/search.jsp");
@@ -135,13 +135,34 @@ public class ControlServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		if(request.getServletPath().equals("/cart")) {
+		if(request.getServletPath().equals("/add-cart")) {
 			int id = Integer.parseInt(request.getParameter("id"));
-
-
+			this.addToCart(id);
+			
+			getServletContext().setAttribute("cart", this.cartBeans.values());
 			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
 			rd.forward(request, response);
-		} else {
+		} 
+		
+		else if(request.getServletPath().equals("/delete-cart")) {			
+			if(request.getParameterValues("delete-cart") == (null)) {
+				
+			}
+			else {
+				ArrayList<Integer> arrayint = new ArrayList<Integer>();
+				String id[] = request.getParameterValues("delete-cart");
+				for (int i = 0; i < id.length; i++) {
+					arrayint.add(Integer.parseInt(id[i]));
+				}
+				
+				this.deleteFromCart(arrayint);
+			}
+			
+			RequestDispatcher rd = request.getRequestDispatcher("/cart.jsp");
+			rd.forward(request, response);
+		}
+		
+		else {
 			doGet(request, response);
 		}
 	}
@@ -149,11 +170,10 @@ public class ControlServlet extends HttpServlet {
 	public void randomTen(GSONParser gsonParser) {
 		ArrayList<PublicationBean> randomTen = new ArrayList<PublicationBean>();
 		Random rand = new Random();
-		this.publicationBeans = gsonParser.getPublication();
 
 		for(int i=0; i<10; i++){
-			int random = rand.nextInt(publicationBeans.size())+1;
-			randomTen.add(publicationBeans.get(random));
+			int random = rand.nextInt(this.publicationBeans.size())+1;
+			randomTen.add(this.publicationBeans.get(random));
 		}
 
 		getServletContext().setAttribute("randomtens", randomTen);
@@ -233,6 +253,16 @@ public class ControlServlet extends HttpServlet {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public void addToCart(int id) {
+		this.cartBeans.put(id, this.publicationBeans.get(id));
+	}
+	
+	public void deleteFromCart(ArrayList<Integer> id) {
+		for(int i=0; i<id.size(); i++) {
+			this.cartBeans.remove(id.get(i));
 		}
 	}
 

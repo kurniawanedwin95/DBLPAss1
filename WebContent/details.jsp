@@ -21,7 +21,7 @@
 <body>
 	<%@ include file="header.html"%>
 	<h3>More Details</h3>
-	<form name="detailForms" action="./cart" method="post">
+	<form name="detailForms" action="./add-cart" method="POST">
 		<ul>
 			<li>Type of Entry: ${details.type }</li>
 			<li>Author(s): <strong>${details.author }</strong></li>
@@ -36,6 +36,7 @@
 			<li>URL: <i>${details.url }</i></li>
 		</ul>
 		<button type="submit" class="btn btn-primary">Add to Cart</button>
+		<input type="hidden" value="${details.id }" name="id"/>
 	</form>
 	<%@ include file="footer.html" %>
 	<!-- Latest compiled and minified JavaScript -->

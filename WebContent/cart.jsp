@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ page import="edu.unsw.comp9321.*"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>My Cart</title>
@@ -24,10 +26,33 @@
 		<c:when test="${empty cart}">
 			Shopping Cart is Empty!
 		</c:when>
+		<c:otherwise>
+			<form name="cartForms" action="./delete-cart" method="POST">
+				<table class="table">
+					<tr>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Publisher</th>
+						<th>Year</th>
+						<th>Type</th>
+						<th>Remove</th>
+					</tr>
+					<c:forEach var="entry" items="${cart}">
+						<tr>
+							<td><a href="./details?id=${entry.id}">${entry.title}</a></td>
+							<td>${entry.author}</td>
+							<td>${entry.publisher}</td>
+							<td>${entry.year}</td>
+							<td>${entry.type}</td>
+							<td><input type="checkbox" value="${entry.id }" name="delete-cart" /></td>
+						</tr>
+					</c:forEach>
+				</table>
+				<button type="submit" class="btn btn-default">Remove from Cart</button>
+			</form>
+		</c:otherwise>
 	</c:choose>
-	<c:otherwise>
-	</c:otherwise>
-	<%@ include file="footer.html" %>
+	<%@ include file="footer.html"%>
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script
